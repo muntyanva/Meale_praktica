@@ -1,152 +1,148 @@
-# ============================================
-# Стадия 1: Сборка фронтенда (Node.js)
-# ============================================
-FROM node:24-alpine AS frontend-builder
+###############################################
+# Сборка фронтенда
+###############################################
+FROM node:24@sha256:934240a162082fd8b8a2f90cd5114446443f1eba1c5378f6687167ca405e6584 \
+    AS frontend-builder
 
 WORKDIR /frontend
 
-COPY frontend/package.json frontend/yarn.lock ./
-RUN yarn install --frozen-lockfile --non-interactive --network-timeout 1000000
-
 COPY frontend .
+
+RUN yarn install \
+    --prefer-offline \
+    --frozen-lockfile \
+    --non-interactive \
+    --production=false \
+    --network-timeout 1000000
+
 RUN yarn generate
 
-# ============================================
-# Стадия 2: Базовый образ Python (Alpine)
-# ============================================
-FROM python:3.12-alpine AS python-base
+###############################################
+# Базовый образ – Python
+###############################################
+FROM python:3.12-slim@sha256:7026274c107626d7e940e0e5d6730481a4600ae95d5ca7eb532dd4180313fea9 \
+    AS python-base
 
-ENV MEALIE_HOME="/app" \
-    PYTHONUNBUFFERED=1 \
+ENV MEALIE_HOME="/app"
+
+ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
     VENV_PATH="/opt/mealie"
 
+# Добавляем виртуальное окружение в PATH
 ENV PATH="$VENV_PATH/bin:$PATH"
 
-# Создаём пользователя abc (UID 911) – именно его ожидает entry.sh
-RUN adduser -D -u 911 abc && \
-    mkdir -p $MEALIE_HOME && \
-    chown abc:abc $MEALIE_HOME
+# Создаём пользователя abc (UID 911) и даём ему права на /app
+RUN useradd -u 911 -U -d $MEALIE_HOME -s /bin/bash abc \
+    && usermod -G users abc \
+    && mkdir -p $MEALIE_HOME \
+    && chown -R abc:abc $MEALIE_HOME
 
-# ============================================
-# Стадия 3: Сборка бэкенд-пакета (uv)
-# ============================================
+###############################################
+# Сборка бэкенда (пакета)
+###############################################
 FROM python-base AS backend-builder
-
-RUN apk add --no-cache \
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
     curl \
-    build-base \
-    libpq-dev \
-    libwebp-dev \
-    ffmpeg \
-    openldap-dev \
-    openssl-dev \
-    libsasl-dev \
-    linux-headers
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pip install uv
+
+# Замораживаем зависимости, чтобы избежать пересборки
 ENV UV_FROZEN=1
 
 WORKDIR /mealie
 
 COPY uv.lock pyproject.toml ./
 COPY mealie ./mealie
+
+# Копируем собранный фронтенд в пакет
 COPY --from=frontend-builder /frontend/dist ./mealie/frontend
 
+# Собираем wheel и исходники
 RUN uv build --out-dir dist
 
-RUN uv export --no-editable --no-emit-project --extra pgsql --format requirements-txt --output-file dist/requirements.txt && \
-    MEALIE_VERSION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])") && \
-    echo "mealie[pgsql]==${MEALIE_VERSION} \\" >> dist/requirements.txt && \
-    pip hash dist/mealie-${MEALIE_VERSION}-py3-none-any.whl | tail -n1 | tr -d '\n' >> dist/requirements.txt && \
-    echo " \\" >> dist/requirements.txt && \
-    pip hash dist/mealie-${MEALIE_VERSION}.tar.gz | tail -n1 >> dist/requirements.txt
+# Формируем requirements.txt с хешами для точной установки
+RUN uv export --no-editable --no-emit-project --extra pgsql --format requirements-txt --output-file dist/requirements.txt \
+    && MEALIE_VERSION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])") \
+    && echo "mealie[pgsql]==${MEALIE_VERSION} \\" >> dist/requirements.txt \
+    && pip hash dist/mealie-${MEALIE_VERSION}-py3-none-any.whl | tail -n1 | tr -d '\n' >> dist/requirements.txt \
+    && echo " \\" >> dist/requirements.txt \
+    && pip hash dist/mealie-${MEALIE_VERSION}.tar.gz | tail -n1 >> dist/requirements.txt
 
-# ============================================
-# Стадия 4: Пакеты (scratch)
-# ============================================
+###############################################
+# Контейнер с пакетами (используется как источник)
+###############################################
 FROM scratch AS packages
 COPY --from=backend-builder /mealie/dist /
 
-# ============================================
-# Стадия 5: Сборка виртуального окружения (без инструментов сборки)
-# ============================================
-FROM python-base AS venv-builder
-
-RUN apk add --no-cache \
-    libpq \
-    libwebp \
+###############################################
+# Сборка виртуального окружения Python
+###############################################
+FROM python-base AS venv-builder-base
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    build-essential \
+    libpq-dev \
+    libwebp-dev \
     ffmpeg \
-    openldap \
-    curl
+    libsasl2-dev libldap2-dev libssl-dev \
+    gnupg gnupg2 gnupg1 \
+    && rm -rf /var/lib/apt/lists/*
+RUN python3 -m venv --upgrade-deps $VENV_PATH
 
-RUN python -m venv --upgrade-deps $VENV_PATH
+FROM venv-builder-base AS venv-builder
+COPY --from=packages * /dist/
+RUN . $VENV_PATH/bin/activate \
+    && pip install --require-hashes -r /dist/requirements.txt --find-links /dist
 
-COPY --from=packages / /dist/
-
-RUN . $VENV_PATH/bin/activate && \
-    pip install --require-hashes -r /dist/requirements.txt --find-links /dist
-
-# ============================================
-# Стадия 6: Финальный образ (production)
-# ============================================
+###############################################
+# Финальный производственный образ
+###############################################
 FROM python-base AS production
-
-ENV PRODUCTION=true \
-    TESTING=false \
-    NLTK_DATA="/nltk_data/" \
-    APP_PORT=9000 \
-    HOST=0.0.0.0
+ENV PRODUCTION=true
+ENV TESTING=false
 
 ARG COMMIT
 ENV GIT_COMMIT_HASH=$COMMIT
 
-# Устанавливаем только рантайм-пакеты
-RUN apk add --no-cache \
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
     curl \
     ffmpeg \
     gosu \
     iproute2 \
-    openldap \
-    libpq \
-    libwebp \
+    libldap-common \
+    libldap2 \
     unzip \
-    tzdata
+    && rm -rf /var/lib/apt/lists/*
 
+# Директория для Docker Secrets
 RUN mkdir -p /run/secrets
 
-# Копируем виртуальное окружение
+# Копируем виртуальное окружение (уже содержит бэкенд и фронтенд)
 COPY --from=venv-builder $VENV_PATH $VENV_PATH
 
-# Копируем скрипты из docker/
-COPY docker/ /tmp/docker/
-RUN cp /tmp/docker/setup_nltk_data.sh $MEALIE_HOME/ && \
-    cp /tmp/docker/healthcheck.sh $MEALIE_HOME/ && \
-    cp /tmp/docker/entry.sh $MEALIE_HOME/run.sh && \
-    chmod +x $MEALIE_HOME/*.sh && \
-    rm -rf /tmp/docker
 
-# Устанавливаем NLTK-данные
-RUN $MEALIE_HOME/setup_nltk_data.sh
 
-# Назначаем владельцем abc (скрипт entry.sh ожидает этого пользователя)
-RUN chown -R abc:abc $MEALIE_HOME $VENV_PATH /nltk_data
+# Устанавливаем данные NLTK для парсера ингредиентов
+ENV NLTK_DATA="/nltk_data/"
+COPY ./docker/setup_nltk_data.sh $MEALIE_HOME/setup_nltk_data.sh
+RUN chmod +x $MEALIE_HOME/setup_nltk_data.sh && $MEALIE_HOME/setup_nltk_data.sh
+
+COPY ./docker/entry.sh /app/run.sh
+RUN chmod +x /app/run.sh
+
+# Назначаем владельцем abc все каталоги, которые будут использоваться в рантайме
+RUN chown -R abc:abc $MEALIE_HOME && chown -R abc:abc /nltk_data
 
 VOLUME [ "$MEALIE_HOME/data/" ]
+ENV APP_PORT=9000
+
 EXPOSE ${APP_PORT}
 
-# Healthcheck
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD $MEALIE_HOME/healthcheck.sh
-
-# НЕ переключаемся на abc здесь – entry.sh сделает это через gosu
-# USER abc  <-- не добавляем
-
 ENTRYPOINT ["/app/run.sh"]
-
-LABEL org.opencontainers.image.source="https://github.com/mealie-recipes/mealie" \
-      org.opencontainers.image.version="${COMMIT}" \
-      org.opencontainers.image.description="Mealie - Recipe Manager"
