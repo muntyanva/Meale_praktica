@@ -1,0 +1,147 @@
+{
+    "teaspoon": {
+        "name": "кафена кашичица",
+        "plural_name": "кафене кашичице",
+        "description": "",
+        "abbreviation": "tsp"
+    },
+    "tablespoon": {
+        "name": "кашика",
+        "plural_name": "кашика",
+        "description": "",
+        "abbreviation": "tbsp"
+    },
+    "cup": {
+        "name": "шоља",
+        "plural_name": "шоља",
+        "description": "",
+        "abbreviation": "шоља"
+    },
+    "fluid-ounce": {
+        "name": "течна унца",
+        "plural_name": "течна унца",
+        "description": "",
+        "abbreviation": "fl oz"
+    },
+    "pint": {
+        "name": "пинта",
+        "plural_name": "пинте",
+        "description": "",
+        "abbreviation": "pt"
+    },
+    "quart": {
+        "name": "четврт галона",
+        "plural_name": "четврт галона",
+        "description": "",
+        "abbreviation": "qt"
+    },
+    "gallon": {
+        "name": "галон",
+        "plural_name": "галона",
+        "description": "",
+        "abbreviation": "gal"
+    },
+    "milliliter": {
+        "name": "милилитар",
+        "plural_name": "милилитар",
+        "description": "",
+        "abbreviation": "ml"
+    },
+    "liter": {
+        "name": "литар",
+        "plural_name": "литара",
+        "description": "",
+        "abbreviation": "l"
+    },
+    "pound": {
+        "name": "фунта",
+        "plural_name": "фунти",
+        "description": "",
+        "abbreviation": "lb",
+        "plural_abbreviation": "lbs"
+    },
+    "ounce": {
+        "name": "унца",
+        "plural_name": "унци",
+        "description": "",
+        "abbreviation": "oz"
+    },
+    "gram": {
+        "name": "грам",
+        "plural_name": "грама",
+        "description": "",
+        "abbreviation": "g"
+    },
+    "kilogram": {
+        "name": "килограм",
+        "plural_name": "килограма",
+        "description": "",
+        "abbreviation": "kg"
+    },
+    "milligram": {
+        "name": "милиграм",
+        "plural_name": "милиграма",
+        "description": "",
+        "abbreviation": "mg"
+    },
+    "splash": {
+        "name": "мало",
+        "plural_name": "мало",
+        "description": "",
+        "abbreviation": ""
+    },
+    "dash": {
+        "name": "осмина кашикице",
+        "plural_name": "осмина кашичице",
+        "description": "",
+        "abbreviation": ""
+    },
+    "serving": {
+        "name": "порција",
+        "plural_name": "порција",
+        "description": "",
+        "abbreviation": ""
+    },
+    "head": {
+        "name": "главица",
+        "plural_name": "главица",
+        "description": "",
+        "abbreviation": ""
+    },
+    "clove": {
+        "name": "чешањ",
+        "plural_name": "чешњева",
+        "description": "",
+        "abbreviation": ""
+    },
+    "can": {
+        "name": "конзерва",
+        "plural_name": "конзерви",
+        "description": "",
+        "abbreviation": ""
+    },
+    "bunch": {
+        "name": "доста",
+        "plural_name": "доста",
+        "description": "",
+        "abbreviation": ""
+    },
+    "pack": {
+        "name": "паковање",
+        "plural_name": "паковања",
+        "description": "",
+        "abbreviation": ""
+    },
+    "pinch": {
+        "name": "прстохват",
+        "plural_name": "прстохвата",
+        "description": "",
+        "abbreviation": ""
+    },
+    "sprig": {
+        "name": "гранчица",
+        "plural_name": "гранчице",
+        "description": "",
+        "abbreviation": ""
+    }
+}

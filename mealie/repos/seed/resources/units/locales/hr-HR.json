@@ -1,0 +1,147 @@
+{
+    "teaspoon": {
+        "name": "žličica",
+        "plural_name": "žličice",
+        "description": "",
+        "abbreviation": "žlič"
+    },
+    "tablespoon": {
+        "name": "žlica",
+        "plural_name": "žlice",
+        "description": "",
+        "abbreviation": "žlic"
+    },
+    "cup": {
+        "name": "šalica",
+        "plural_name": "šalice",
+        "description": "",
+        "abbreviation": "c"
+    },
+    "fluid-ounce": {
+        "name": "tekuća unca",
+        "plural_name": "tekuće unce",
+        "description": "",
+        "abbreviation": "fl oz"
+    },
+    "pint": {
+        "name": "pint",
+        "plural_name": "pinte",
+        "description": "",
+        "abbreviation": "pt"
+    },
+    "quart": {
+        "name": "kvart",
+        "plural_name": "kvarti",
+        "description": "",
+        "abbreviation": "qt"
+    },
+    "gallon": {
+        "name": "galon",
+        "plural_name": "galoni",
+        "description": "",
+        "abbreviation": "gal"
+    },
+    "milliliter": {
+        "name": "mililitar",
+        "plural_name": "mililitri",
+        "description": "",
+        "abbreviation": "ml"
+    },
+    "liter": {
+        "name": "litra",
+        "plural_name": "litre",
+        "description": "",
+        "abbreviation": "l"
+    },
+    "pound": {
+        "name": "funta",
+        "plural_name": "funte",
+        "description": "",
+        "abbreviation": "lb",
+        "plural_abbreviation": "lbs"
+    },
+    "ounce": {
+        "name": "unca",
+        "plural_name": "unce",
+        "description": "",
+        "abbreviation": "oz"
+    },
+    "gram": {
+        "name": "gram",
+        "plural_name": "grami",
+        "description": "",
+        "abbreviation": "g"
+    },
+    "kilogram": {
+        "name": "kilogram",
+        "plural_name": "kilogrami",
+        "description": "",
+        "abbreviation": "kg"
+    },
+    "milligram": {
+        "name": "miligram",
+        "plural_name": "miligrami",
+        "description": "",
+        "abbreviation": "mg"
+    },
+    "splash": {
+        "name": "splash",
+        "plural_name": "prskanja",
+        "description": "",
+        "abbreviation": ""
+    },
+    "dash": {
+        "name": "dash",
+        "plural_name": "prstohvati",
+        "description": "",
+        "abbreviation": ""
+    },
+    "serving": {
+        "name": "porcija",
+        "plural_name": "porcije",
+        "description": "",
+        "abbreviation": ""
+    },
+    "head": {
+        "name": "glava",
+        "plural_name": "glavice",
+        "description": "",
+        "abbreviation": ""
+    },
+    "clove": {
+        "name": "klinčić",
+        "plural_name": "češnjevi",
+        "description": "",
+        "abbreviation": ""
+    },
+    "can": {
+        "name": "limenka",
+        "plural_name": "konzerve",
+        "description": "",
+        "abbreviation": ""
+    },
+    "bunch": {
+        "name": "vezica",
+        "plural_name": "vezice",
+        "description": "",
+        "abbreviation": ""
+    },
+    "pack": {
+        "name": "pakiranje",
+        "plural_name": "pakiranja",
+        "description": "",
+        "abbreviation": ""
+    },
+    "pinch": {
+        "name": "prstohvat",
+        "plural_name": "prstohvati",
+        "description": "",
+        "abbreviation": ""
+    },
+    "sprig": {
+        "name": "grančica",
+        "plural_name": "grančice",
+        "description": "",
+        "abbreviation": ""
+    }
+}

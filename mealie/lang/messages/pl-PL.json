@@ -1,0 +1,111 @@
+{
+    "generic": {
+        "server-error": "Wystąpił nieoczekiwany błąd"
+    },
+    "recipe": {
+        "unique-name-error": "Nazwy przepisów muszą być unikatowe",
+        "recipe-created": "Przepis został utworzony",
+        "recipe-image-deleted": "Obrazek przepisu został usunięty",
+        "recipe-defaults": {
+            "ingredient-note": "1 szklanka mąki",
+            "step-text": "Kroki przepisu, jak również inne pola na stronie przepisu obsługują składnię markdown.\n\n**Dodaj link**\n\n[Mój link](https://demo.mealie.io)\n"
+        },
+        "servings-text": {
+            "makes": "Daje",
+            "serves": "Wystarcza dla",
+            "serving": "Porcja",
+            "servings": "Porcje",
+            "yield": "Ilość",
+            "yields": "Porcje"
+        },
+        "and-amount": "i {amount}",
+        "or-ingredient": "lub {ingredient}",
+        "import-errors": {
+            "ai-not-enabled": "AI services are not enabled",
+            "ai-request-failed": "The AI provider was unable to complete the request. Please try again",
+            "image-provider-not-enabled": "AI image services are not enabled",
+            "no-recipe-found": "No recipe was found in the provided source",
+            "no-source": "No content, images, or URL were provided",
+            "provider-returned-nothing": "The AI provider did not return a recipe",
+            "unknown-error": "Something went wrong while creating the recipe. Please try again",
+            "unreadable-source": "Unable to read any content from the provided source",
+            "video-download-failed": "Unable to download the video. It may be private, removed, or from an unsupported site"
+        },
+        "create-progress": {
+            "creating-recipe": "Creating recipe...",
+            "creating-recipe-from-transcript-with-ai": "Tworzenie przepisu z transkryptu z pomocą AI...",
+            "creating-recipe-from-webpage-data": "Tworzenie przepisu na podstawie danych ze strony...",
+            "downloading-image": "Pobieranie zdjęcia...",
+            "downloading-video": "Pobieranie wideo...",
+            "extracting-recipe-data": "Wyodrębnianie danych przepisu...",
+            "fetching-webpage": "Pobieranie strony...",
+            "organizing-recipe": "Organizing recipe...",
+            "reading-images-with-ai": "Reading images with AI...",
+            "reading-source-with-ai": "Reading source with AI...",
+            "transcribing-audio-with-ai": "Transkrypcja audio przy użyciu AI...",
+            "translating-recipe": "Translating recipe..."
+        }
+    },
+    "mealplan": {
+        "no-recipes-match-your-rules": "Nie znaleziono przepisu spełniającego warunki"
+    },
+    "user": {
+        "user-updated": "Użytkownik został zaktualizowany",
+        "password-updated": "Hasło zostało zmienione",
+        "invalid-current-password": "Bieżące hasło jest nieprawidłowe",
+        "ldap-update-password-unavailable": "Nie można zaktualizować hasła, użytkownik jest kontrolowany przez LDAP"
+    },
+    "group": {
+        "report-deleted": "Raport usunięty."
+    },
+    "exceptions": {
+        "permission_denied": "Nie masz uprawnień do wykonania tej akcji",
+        "recursive-recipe-link": "Przepis nie może odnosić się do samego siebie bezpośrednio, ani pośrednio",
+        "no-entry-found": "Wskazany zasób jest niedostępny",
+        "rate-limit-error": "The AI provider is rate limiting requests. Please wait a moment and try again",
+        "integrity-error": "Błąd spójności bazy danych",
+        "username-conflict-error": "Ta nazwa użytkownika jest już zajęta",
+        "email-conflict-error": "Ten adres e-mail już jest zajęty"
+    },
+    "notifications": {
+        "generic-created": "Utworzono {name}",
+        "generic-updated": "Zaktualizowano {name}",
+        "generic-created-with-url": "Utworzono {name}, {url}",
+        "generic-updated-with-url": "Zaktualizowano {name}, {url}",
+        "generic-duplicated": "Zduplikowano {name}",
+        "generic-deleted": "Usunięto {name}",
+        "logged-out": "Wylogowano"
+    },
+    "datetime": {
+        "year": "rok|lat",
+        "day": "dzień|dni",
+        "hour": "godzina|godzin",
+        "minute": "minuta|minut",
+        "second": "sekunda|sekund",
+        "millisecond": "milisekunda|milisekund",
+        "microsecond": "mikrosekunda|mikrosekund"
+    },
+    "emails": {
+        "password": {
+            "subject": "Zapomniane hasło Mealie",
+            "header_text": "Zapomniane hasło",
+            "message_top": "Poproszono o zresetowanie hasła.",
+            "message_bottom": "Kliknij przycisk powyżej, aby zresetować swoje hasło.",
+            "button_text": "Zresetuj hasło"
+        },
+        "invitation": {
+            "subject": "Zaproszenie do Mealie",
+            "header_text": "Otrzymano zaproszenie!",
+            "message_top": "Zaproszenie dołączenia do Mealie.",
+            "message_bottom": "Kliknij powyższy przycisk, aby zaakceptować zaproszenie.",
+            "button_text": "Akceptuj zaproszenie"
+        },
+        "test": {
+            "subject": "E-mail testowy Mealie",
+            "header_text": "E-mail testowy",
+            "message_top": "To jest e-mail testowy.",
+            "message_bottom": "Kliknij przycisk powyżej, aby przetestować e-mail.",
+            "button_text": "Otwórz Mealie"
+        }
+    }
+}
