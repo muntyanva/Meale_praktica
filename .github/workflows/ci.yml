@@ -1,0 +1,35 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq
+        
+    - name: Verify Docker is running
+      run: |
+        docker --version
+        docker compose version
+        
+    - name: Run setup script
+      run: |
+        chmod +x setup.sh
+        sh setup.sh
+        
+    - name: Run smoke tests
+      run: |
+        chmod +x smoke_test.sh
+        sh smoke_test.sh
