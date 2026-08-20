@@ -2,7 +2,7 @@
 # Скрипт автоматического развертывания Mealie с загрузкой тестовых данных
 # Строго совместим с POSIX sh
 
-# set -e # Раскомментируй, если хочешь жесткого прерывания при любой ошибке
+set -e # Раскомментируй, если хочешь жесткого прерывания при любой ошибке
 
 echo "=========================================="
 echo "Начало развертывания Mealie"
@@ -100,7 +100,7 @@ APP_PORT=${APP_PORT:-9091}
 
 TOKEN_RESPONSE=$(curl -s -X POST "http://localhost:$APP_PORT/api/auth/token" \
     -H "Content-Type: application/x-www-form-urlencoded" \
-    -d "username=changeme@example.com&password=MyPassword&grant_type=password")
+    -d "username=admin@example.com&password=MyPassword&grant_type=password")
 
 # Извлекаем токен с помощью sed (POSIX-совместимый способ без jq для простого парсинга)
 ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p')
