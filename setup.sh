@@ -50,6 +50,25 @@ else
     echo "[2/8] Файл .env уже существует. Пропускаем генерацию (идемпотентность)."
 fi
 
+echo "[2.5/8] Проверка исходного кода Mealie..."
+MEALIE_TAG="v3.23.1"
+MEALIE_REPO="https://github.com/mealie-recipes/mealie.git"
+
+if [ ! -d "mealie" ] || [ ! -d "frontend" ]; then
+    echo "Клонирование Mealie $MEALIE_TAG..."
+    TEMP_DIR=$(mktemp -d)
+    git clone --branch "$MEALIE_TAG" --depth 1 "$MEALIE_REPO" "$TEMP_DIR/mealie-src"
+    
+    rsync -av --exclude='.git' "$TEMP_DIR/mealie-src/" ./
+    rsync -av --exclude='.git' "$TEMP_DIR/mealie-src/" ./
+    
+    # Чистим временную директорию
+    rm -rf "$TEMP_DIR"
+    echo "Исходный код Mealie $MEALIE_TAG успешно скопирован."
+else
+    echo "Исходный код Mealie уже присутствует. Пропуск клонирования (идемпотентность)."
+fi
+
 # -----------------------------------------------------------------------------
 # 3. Сборка образов
 # -----------------------------------------------------------------------------
@@ -100,7 +119,7 @@ APP_PORT=${APP_PORT:-9091}
 
 TOKEN_RESPONSE=$(curl -s -X POST "http://localhost:$APP_PORT/api/auth/token" \
     -H "Content-Type: application/x-www-form-urlencoded" \
-    -d "username=admin@example.com&password=MyPassword&grant_type=password")
+    -d "username=changeme@example.com&password=MyPassword&grant_type=password")
 
 # Извлекаем токен с помощью sed (POSIX-совместимый способ без jq для простого парсинга)
 ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p')

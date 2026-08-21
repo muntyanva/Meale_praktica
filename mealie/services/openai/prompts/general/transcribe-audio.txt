@@ -1,1 +1,0 @@
-Transcribe any audio data provided to you. You should respond only with the audio transcription and nothing else.
